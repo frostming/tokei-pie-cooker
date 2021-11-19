@@ -1,4 +1,4 @@
-# tokei-pie-cooker
+# Tokei Pie Cooker
 
 Visualize your code statistics with Pie Chart
 
