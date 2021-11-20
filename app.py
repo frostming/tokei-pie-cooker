@@ -1,57 +1,55 @@
 import io
-from os import abort
-from pathlib import Path
-
-from flask import Flask, redirect, url_for, render_template, request
-from tokei_pie.main import draw, read_root
 import json
-import zipfile
+import os
 import shutil
-import requests
 import subprocess
+import zipfile
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
+import requests
+from cachecontrol.caches import FileCache
+from flask import Flask, abort, redirect, render_template, request, url_for
+from tokei_pie.main import draw, read_root
+
 app = Flask(__name__)
-
 OUTPUT_DIR = Path(__file__).with_name("repos")
+CACHE_DIR = Path(__file__).with_name(".caches")
+cached = FileCache(CACHE_DIR.as_posix())
 
 
-def _download_repo(user: str, repo: str, branch: str) -> Path:
+def _get_loc(user: str, repo: str, branch: str) -> bytes:
     url = f"http://github.com/{user}/{repo}/archive/{branch}.zip"
     app.logger.info("Downloading zip: %s", url)
     resp = requests.get(url, stream=True)
     if resp.status_code == 404:
         raise RuntimeError("Not found")
-    src_dir = OUTPUT_DIR / user / f"{repo}-{branch}"
-    if src_dir.exists():
-        shutil.rmtree(src_dir)
-    src_dir.parent.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory() as tmpdir:
         target_file = Path(tmpdir) / f"{repo}-{branch}.zip"
         with target_file.open("wb") as f:
             for chunk in resp.iter_content():
                 f.write(chunk)
         with zipfile.ZipFile(target_file) as zf:
-            zf.extractall(OUTPUT_DIR / user)
-    return src_dir
-
-
-def _render_loc_report(src_dir: Path) -> str:
-    app.logger.info("Rendering code directory: %s", src_dir)
-    command = ["tokei", "-o", "json"]
-    result = subprocess.run(command, capture_output=True, check=True, cwd=src_dir)
-    data = json.loads(result.stdout.decode())
-    sectors = read_root(data)
-    content = io.StringIO()
-    draw(sectors, content)
-    return content.getvalue()
+            zf.extractall(tmpdir)
+        src_dir = os.path.join(tmpdir, f"{repo}-{branch}")
+        command = ["tokei", "-o", "json"]
+        result = subprocess.run(command, capture_output=True, check=True, cwd=src_dir)
+        shutil.rmtree(src_dir)
+        return result.stdout
 
 
 def generate_report(user: str, repo: str, branch: str, refresh: bool = False) -> str:
-    src_dir = OUTPUT_DIR / user / f"{repo}-{branch}"
-    if not src_dir.exists() or refresh:
-        src_dir = _download_repo(user, repo, branch)
-    return _render_loc_report(src_dir)
+    fkey = f"{user}/{repo}/{branch}"
+    if refresh:
+        cached.delete(fkey)
+    data = cached.get(fkey)
+    if data is None:
+        data = _get_loc(user, repo, branch)
+        cached.set(fkey, data)
+    sectors = read_root(json.loads(data))
+    buffer = io.StringIO()
+    draw(sectors, buffer)
+    return buffer.getvalue()
 
 
 @app.get("/<user>/<repo>/<branch>")
