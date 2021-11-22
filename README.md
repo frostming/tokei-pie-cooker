@@ -26,10 +26,10 @@ venv/bin/flask run
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-### Use as docker container
+### As a container
 
 ```bash
-docker run -v .caches:/app/.caches -p 8000:8000 -d frostming/tokei-pie-cooker
+docker run -v ./tokei-caches:/app/.caches -p 8000:8000 -d frostming/tokei-pie-cooker
 
 # Visit http://localhost:8000
 ```
