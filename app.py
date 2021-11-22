@@ -52,13 +52,10 @@ def generate_report(user: str, repo: str, branch: str, refresh: bool = False) ->
     return buffer.getvalue()
 
 
+@app.get("/<user>/<repo>")
 @app.get("/<user>/<repo>/<branch>")
-def repo_pie(user: str, repo: str, branch: str):
+def repo_pie(user: str, repo: str, branch: str = "master"):
     refresh = request.args.get("refresh")
-    if not branch:
-        return redirect(
-            url_for("repo_pie", user=user, repo=repo, branch="master", refresh=refresh)
-        )
     try:
         return generate_report(user, repo, branch, refresh)
     except RuntimeError:
