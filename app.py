@@ -6,6 +6,7 @@ import subprocess
 import zipfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Optional
 
 import requests
 from cachecontrol.caches import FileCache
@@ -52,10 +53,20 @@ def generate_report(user: str, repo: str, branch: str, refresh: bool = False) ->
     return buffer.getvalue()
 
 
-@app.get("/<user>/<repo>")
+def _get_default_branch(user: str, repo: str) -> str:
+    headers = {"Accept": "application/vnd.github.v3+json"}
+    resp = requests.get(f"https://api.github.com/repos/{user}/{repo}", headers=headers)
+    if resp.status_code == 404:
+        raise RuntimeError("Not found")
+    return resp.json().get("default_branch", "master")
+
+
+@app.get("/<user>/<repo>", defaults={"branch": None})
 @app.get("/<user>/<repo>/<branch>")
-def repo_pie(user: str, repo: str, branch: str = "master"):
+def repo_pie(user: str, repo: str, branch: Optional[str] = None):
     refresh = request.args.get("refresh")
+    if branch is None:
+        branch = _get_default_branch(user, repo)
     try:
         return generate_report(user, repo, branch, refresh)
     except RuntimeError:
