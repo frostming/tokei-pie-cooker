@@ -24,6 +24,10 @@ pdm dev
 
 ## Deployment
 
+### Using Zeabur™
+
+[![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/RH2BNM?referralCode=frostming)
+
 ### As a container
 
 ```bash
