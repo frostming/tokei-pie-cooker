@@ -1,0 +1,28 @@
+[project]
+name = "tokei-pie-cooker"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Frost Ming", email = "me@frostming.com"},
+]
+dependencies = [
+    "requests>=2.32.3",
+    "cachecontrol>=0.14.0",
+    "flask>=3.0.3",
+    "tokei-pie>=1.2.0",
+    "tokei>=12.1.2",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+deploy = [
+    "gunicorn>=23.0.0",
+]
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+dev = "flask run"

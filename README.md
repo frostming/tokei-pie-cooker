@@ -1,5 +1,7 @@
 # Tokei Pie Cooker
 
+[![pdm-managed](https://img.shields.io/endpoint?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Fpdm-project%2F.github%2Fbadge.json)](https://pdm-project.org)
+
 Visualize your code statistics with Pie Chart
 
 ---
@@ -8,23 +10,19 @@ Visualize your code statistics with Pie Chart
 
 ## Start locally
 
-This project is developed on Python 3.10, while it should run smoothly on Python>=3.7.
+This project requires Python 3.10 or later.
+
+It is managed by [PDM](https://pdm-project.org/). Please refer to the [Installation Guide](https://pdm-project.org/en/latest/#installation) to install PDM first.
 
 ```bash
-# make a virtualenv
-python3 -m venv venv
-# install requirements
-venv/bin/python -m pip -r requirements.txt
+# install dependencies
+pdm install
 # start development server
-venv/bin/flask run
-# Now visit http://localhost:8000
+pdm dev
+# Now visit http://localhost:5000
 ```
 
 ## Deployment
-
-### Heroku
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### As a container
 
