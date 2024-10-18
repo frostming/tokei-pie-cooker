@@ -6,7 +6,7 @@ Visualize your code statistics with Pie Chart
 
 ---
 
-🚀 [Demo Website](https://tokei-pie-cooker.herokuapp.com/) 🚀
+🚀 [Demo Website](https://piechart.zeabur.app/) 🚀
 
 ## Start locally
 
