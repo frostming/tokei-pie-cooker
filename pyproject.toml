@@ -7,7 +7,7 @@ authors = [
 ]
 dependencies = [
     "requests>=2.32.3",
-    "cachecontrol>=0.14.0",
+    "cachecontrol[filecache]>=0.14.0",
     "flask>=3.0.3",
     "tokei-pie>=1.2.0",
     "tokei>=12.1.2",

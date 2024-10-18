@@ -5,10 +5,10 @@
 groups = ["default", "deploy"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:4e11d1152a643ae8d40ffea8af08685828153a46ec6b2c2422c4460afc6ba80a"
+content_hash = "sha256:e1f42afbe9c36788b0060a0e4cfef9bc8e438fe9435a5687b1ce43b637a3852e"
 
 [[metadata.targets]]
-requires_python = ">=3.10"
+requires_python = "==3.10.*"
 
 [[package]]
 name = "blinker"
@@ -30,6 +30,22 @@ groups = ["default"]
 dependencies = [
     "msgpack<2.0.0,>=0.5.2",
     "requests>=2.16.0",
+]
+files = [
+    {file = "cachecontrol-0.14.0-py3-none-any.whl", hash = "sha256:f5bf3f0620c38db2e5122c0726bdebb0d16869de966ea6a2befe92470b740ea0"},
+    {file = "cachecontrol-0.14.0.tar.gz", hash = "sha256:7db1195b41c81f8274a7bbd97c956f44e8348265a1bc7641c37dfebc39f0c938"},
+]
+
+[[package]]
+name = "cachecontrol"
+version = "0.14.0"
+extras = ["filecache"]
+requires_python = ">=3.7"
+summary = "httplib2 caching for requests"
+groups = ["default"]
+dependencies = [
+    "cachecontrol==0.14.0",
+    "filelock>=3.8.0",
 ]
 files = [
     {file = "cachecontrol-0.14.0-py3-none-any.whl", hash = "sha256:f5bf3f0620c38db2e5122c0726bdebb0d16869de966ea6a2befe92470b740ea0"},
@@ -143,6 +159,17 @@ marker = "platform_system == \"Windows\""
 files = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
+]
+
+[[package]]
+name = "filelock"
+version = "3.16.1"
+requires_python = ">=3.8"
+summary = "A platform independent file lock."
+groups = ["default"]
+files = [
+    {file = "filelock-3.16.1-py3-none-any.whl", hash = "sha256:2082e5703d51fbf98ea75855d9d5527e33d8ff23099bec374a134febee6946b0"},
+    {file = "filelock-3.16.1.tar.gz", hash = "sha256:c249fbfcd5db47e5e2d6d62198e565475ee65e4831e2561c8e313fa7eb961435"},
 ]
 
 [[package]]
